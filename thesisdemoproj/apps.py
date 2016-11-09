@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class TestingdjangoConfig(AppConfig):
-    name = 'testingdjango'
+    name = 'thesisdemoproj'

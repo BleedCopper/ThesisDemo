@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '307395386302923',
+                xfbml: true,
+                version: 'v2.8'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function myFacebookLogin() {
+            var list;
+            FB.login(function () {
+                FB.api(
+                        "/me?fields=id,email,posts",
+                        function (response) {
+                            if (response && !response.error) {
+                                var uid = response.id;
+                                var list = [];
+                                var time = [];
+                                for (var i = 0, l = response.posts.data.length; i < l; i++) {
+                                    var post = response.posts.data[i];
+                                    if (post.message) {
+                                        list.push(post.message);
+                                        time.push(post.created_time);
+                                    }
+                                }
+                                var URL = "{% url 'thesisdemoproj:facebookhandler' %}";
+
+                                var data = {
+                                    'uid': uid,
+                                    'posts[]': list,
+                                    'time[]': time
+                                };
+
+                                $.post(URL, data, function (response) {
+{#                                        alert(response);#}
+                                    if (response != 'error') {
+{#                                        alert("hey");#}
+                                        $('#msg').show();
+                                        $("#results").html(response);
+                                    }
+                                });
+                            }
+                        }
+                );
+            }, {scope: 'user_posts'});
+        }
+
+    function TwitterData() {
+{#            if (checkRequired() == false) {#}
+{#                var day = $('input[name="bdday"]').val();#}
+{#                var year = $('input[name="bdyear"]').val();#}
+{#                var month = $('#cardmonth option:selected').text();#}
+{#                var gender = $('input[name="gender"]:checked').val();#}
+{#                var URL = "{% url 'thesisdatagathering:oauth_auth' %}";#}
+{#                var data = {'year': year, 'day': day, 'month': month, 'gender': gender};#}
+                {#            $.post(URL, data);#}
+
+                $('#send').submit();
+                {#                $.redirect(URL, data);#}
+{#            }#}
+            {#                window.location = 'auth?day=' + day+'&year='+year+'&month='+month+"&gender="+gender;#}
+        }
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#send').on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            function getParameterByName(name, url) {
+                if (!url) {
+                    url = window.location.href;
+                }
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
+            var gen = getParameterByName('gen');
+            var perc = getParameterByName('perc');
+            if (gen == null) $('#msg').hide();
+            else {
+                $("#results").html(gen + " - " + perc + "%");
+            }
+        });
+    </script>
+    <div class="ui container">
+        <div class="ui basic very padded segment"></div>
+        <div class="ui positive message" id="msg">
+            <div class="header">
+                Results
+            </div>
+            <p id="results">We've recorded your data!</p>
+        </div>
+        <div class="ui basic very padded segment">
+            <div class="ui attached message">
+                <div class="header">
+                    Gender and Age Profiling
+                </div>
+                <p>We are students currently having our thesis entitled: A Model for Age and Gender Profiling
+                    of Social Media Accounts Based on Post Contents. Our system aims to reduce anonymity by
+                    identifying the age and gender of social media accounts. By reducing online anonymity, we aim
+                    to reduce cybercrimes and support business intelligence.</p>
+            </div>
+            <div class="ui form attached segment">
+                <form id="send" class="ui form" method="post" action="{% url 'thesisdemoproj:oauth_auth' %}">
+                </form>
+                <button class="ui blue button" onclick="myFacebookLogin()">Send my Facebook Data</button>
+                {#    <a href="auth/">Send my Twitter Data</a>#}
+                <button class="ui blue button" onclick="TwitterData()">Send my Twitter Data</button>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content %}

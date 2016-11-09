@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'testingdjango'
+    'thesisdemoproj'
 ]
 
 MIDDLEWARE = [
@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'TestDjango.urls'
+ROOT_URLCONF = 'ThesisDemo.urls'
 
 TEMPLATES = [
     {
@@ -67,15 +67,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'TestDjango.wsgi.application'
+WSGI_APPLICATION = 'ThesisDemo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'thesisdata',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '1234',
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -114,3 +119,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TWITTER_KEY = '6Ou9SSfowTYRYDsQJDX2g6pcV'
+TWITTER_SECRET = '6OT7ybjNe6HL2kKa7SM3hXnW4dwtziWfFroiFHoSwVPV49nRnR'
+
+LOGIN_URL='/thesisdemoproj/'
+LOGIN_REDIRECT_URL='/thesisdemoproj'

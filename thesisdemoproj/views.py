@@ -104,6 +104,8 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
         else:
             m += 1
         # print(tweet['text'])
+
+    print(str(f)+" "+str(m))
     if (f > m):
         return HttpResponseRedirect('/thesisdemoproj?gen=Female&perc='+str(f / (m + f) * 100))
     else:

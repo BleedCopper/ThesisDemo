@@ -107,4 +107,4 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
     if (f > m):
         return HttpResponseRedirect('/thesisdemoproj?gen=Female&perc='+str(f / (m + f) * 100))
     else:
-        return HttpResponseRedirect('/thesisdemoproj?gen=Male&perc='+str(f / (m + f) * 100))
+        return HttpResponseRedirect('/thesisdemoproj?gen=Male&perc='+str(m / (m + f) * 100))
